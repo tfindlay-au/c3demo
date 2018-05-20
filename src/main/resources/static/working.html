@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Load c3.css -->
+    <link href="/css/c3.min.css" rel="stylesheet">
+    <!-- Load c3.css -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- jquery v3.3.1 -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="/js/bootstrap.min.js" charset="utf-8"></script>
+    <!-- D3 v5.4.0 -->
+    <script src="/js/d3.min.js" charset="utf-8"></script>
+    <!-- C3 v0.6.1 -->
+    <script src="/js/c3.min.js"></script>
+
+</head>
+<body>
+    <h1>Hello World</h1>
+    <div id="chartBlocks">
+        <!-- Charts get put in here -->
+    </div>
+</body>
+</html>
+<script type="application/javascript">
+    var chartsToMake = 4;
+
+    var chartData = new Map();
+    var tags = [];
+
+    for(var i=0; i< chartsToMake; i++) {
+        console.log("Defining chart" +i);
+
+        var data=["Chart " + i];
+        for(var x=1; x<=96; x++) {
+            data.push(Math.floor(Math.random() * 100));
+        }
+
+        document.getElementById("chartBlocks").innerHTML += "<div id=\"chart" + i + "\"></div>";
+        tags.push("#chart" + i);
+        chartData.set("#chart" + i, data);
+    }
+
+    tags.forEach( function(chartTag) {
+        console.log("Generating " + chartTag);
+
+        var chart = c3.generate({
+            bindto: chartTag,
+            data: {
+                columns: [
+                    chartData.get(chartTag)
+                ]
+            }
+        });
+    });
+</script>

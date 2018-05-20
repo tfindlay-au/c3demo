@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Load c3.css -->
+    <link href="/css/c3.min.css" rel="stylesheet">
+    <!-- Load c3.css -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- jquery v3.3.1 -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="/js/bootstrap.min.js" charset="utf-8"></script>
+    <!-- D3 v5.4.0 -->
+    <script src="/js/d3.min.js" charset="utf-8"></script>
+    <!-- C3 v0.6.1 -->
+    <script src="/js/c3.min.js"></script>
+
+</head>
+<body>
+    <h1>Hello World</h1>
+    <div id="chartBlocks">
+        <!-- Charts get put in here -->
+    </div>
+</body>
+</html>
+<script type="application/javascript">
+    var chartsToMake = 4;
+
+    Array.prototype.unique = function() {
+        return this.filter( function(v,i,a) {
+            return a.indexOf(v) === i;
+        });
+    };
+
+    var x = $.getJSON('api/randomData?chartCount=' + chartsToMake).done( function(data) {
+
+        // Extract list of servers from the data...
+        var hostList = []
+        $.map(data, function(row) { hostList.push(row.host); });
+
+        // Make it a unique list
+        var uniqueHostList = hostList.unique();
+
+        // Iterate over the unique list of servers
+        uniqueHostList.forEach( function(host) {
+            var tag = "chart" + host.replace(/\./g, "");
+            var hostdata = data.filter( (v,i,a) => v.host === host)
+
+            console.log("Processing Server:" + host + " with " + hostdata.length + " rows");
+
+            // Create DOM element to bind the chart to
+            document.getElementById("chartBlocks").innerHTML += "<div id=\"" + tag.replaceAll('#','') + "\"></div>";
+
+            // Create the Chart here
+            var chart = c3.generate({
+                bindto: "#" + tag,
+                data: {
+                    json: hostdata,
+                    keys: { value: ['lowerband'] }
+                }
+            });
+        });
+    });
+</script>
