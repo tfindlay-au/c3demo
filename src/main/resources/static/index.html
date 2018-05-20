@@ -52,7 +52,15 @@
             console.log("Processing Server:" + host + " with " + hostdata.length + " rows");
 
             // Create DOM element to bind the chart to
-            document.getElementById("chartBlocks").innerHTML += "<div id=\"" + tag.replaceAll('#','') + "\"></div>";
+
+            // -----------------------------------------------------------------------
+            // This appends content, but in doing so it looses the event functionality
+            // document.getElementById("chartBlocks").innerHTML += "<div id=\"" + tag.replaceAll('#','') + "\"></div>";
+
+            // This appends content, but retains the event functionality which allows all charts to render
+            // Full credit to mgraham on StackOverflow for explaining this:
+            //   https://stackoverflow.com/questions/50433738/c3-charts-not-rendering-from-jquery-data
+            d3.select("#chartBlocks").append("div").attr("id", tag.replace('#',''));
 
             // Create the Chart here
             var chart = c3.generate({
